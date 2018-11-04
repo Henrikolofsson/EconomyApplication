@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">EconomyApplication</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tvLogInMessage">Please choose desired user:</string>
+    <string name="btnlogIn">Log in</string>
+    <string name="Incomes">Incomes</string>
+    <string name="Expenses">Expenses</string>
+    <string name="AddIncome">Add Income</string>
+    <string name="AddExpense">Add Expense</string>
+    <string name="Title">Title</string>
+    <string name="Category">Category</string>
+    <string name="Date">Date</string>
+    <string name="Price">Price</string>
+    <string name="Salary">Salary</string>
+    <string name="Other">Other</string>
+    <string name="Groceries">Groceries</string>
+    <string name="Accommodation">Accommodation</string>
+    <string name="Sparetime">Sparetime</string>
+    <string name="Travel">Travel</string>s
+    <string name="dateFormat">yy-mm-dd</string>
+    <string name="DateFrom">Date from: </string>
+    <string name="DateTo">Date To: </string>
+    <string name="btnFilter">Filter</string>
+    <string name="btnUnfilter">Unfilter</string>
+</resources>
