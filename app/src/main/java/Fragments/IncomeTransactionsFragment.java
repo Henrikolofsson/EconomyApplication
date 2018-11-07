@@ -2,8 +2,11 @@ package Fragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +17,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import Adapters.IncomeAdapter;
+import Entities.Expense;
 import Entities.Income;
 import henrik.mau.economyapplication.Controller;
 import henrik.mau.economyapplication.DateHelper;
@@ -32,6 +40,7 @@ public class IncomeTransactionsFragment extends Fragment {
     private IncomeAdapter incomeAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Income> content = new ArrayList<Income>();
+    private ArrayList<Income> filteredContent = new ArrayList<>();
     private Button btnFilter;
     private Button btnDateFrom;
     private Button btnDateTo;
@@ -40,7 +49,7 @@ public class IncomeTransactionsFragment extends Fragment {
     private long dateTo;
     private TextView tvDateFrom;
     private TextView tvDateTo;
-
+    private boolean filtered;
 
     public IncomeTransactionsFragment() {
         // Required empty public constructor
@@ -56,6 +65,23 @@ public class IncomeTransactionsFragment extends Fragment {
         incomeAdapter = new IncomeAdapter(getActivity(), content);
         incomeAdapter.setController(controller);
         recyclerView.setAdapter(incomeAdapter);
+
+        if(savedInstanceState!=null){
+            long newDateFrom = savedInstanceState.getLong("dateFrom");
+            long newDateTo = savedInstanceState.getLong("dateTo");
+            ArrayList<Income> recreatedContent = (ArrayList<Income>) savedInstanceState.getSerializable("content");
+            ArrayList<Income> recreatedFilteredContent = (ArrayList<Income>) savedInstanceState.getSerializable("filteredcontent");
+            filtered = savedInstanceState.getBoolean("filtered");
+            if((newDateFrom > 0) && (newDateTo > 0)){
+                setDateFrom(newDateFrom);
+                setDateTo(newDateTo);
+                tvDateFrom.setText("Date From: " + DateHelper.convertDate(newDateFrom));
+                tvDateTo.setText("Date From: " + DateHelper.convertDate(newDateTo));
+            }
+
+            setContent(recreatedContent);
+            incomeAdapter.setContent(recreatedContent);
+        }
         return view;
     }
 
@@ -77,17 +103,12 @@ public class IncomeTransactionsFragment extends Fragment {
         btnAll.setOnClickListener(new ButtonUnfilterIncomeListener());
     }
 
-    public void onResume(){
-        super.onResume();
-        incomeAdapter.setContent(content);
-    }
-
     public void setController(Controller controller){
         this.controller = controller;
     }
 
     public void setContent(List<Income> content){
-        this.content = (ArrayList<Income>) content; //ArrayList eller list?
+        this.content = (ArrayList<Income>) content;
     }
 
     public void setDateTo(long dateTo){
@@ -150,6 +171,7 @@ public class IncomeTransactionsFragment extends Fragment {
         public void onClick(View v) {
             if(dateFrom > 0 && dateTo > 0){
                 controller.filterIncomeList(getDateFrom(), getDateTo());
+                filtered = true;
                 update();
             }
         }
@@ -159,12 +181,39 @@ public class IncomeTransactionsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             controller.addIncomeList();
+            filtered = false;
             update();
         }
     }
 
     public void update(){
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(content!=null){
+            incomeAdapter.setContent(content);
+        }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("filtered", filtered);
+        if((dateFrom > 0) && (dateTo > 0)) {
+            outState.putLong("dateFrom", dateFrom);
+            outState.putLong("dateTo", dateTo);
+        }
+        outState.putSerializable("content", content);
+        outState.putSerializable("filteredcontent", filteredContent);
     }
 
 }

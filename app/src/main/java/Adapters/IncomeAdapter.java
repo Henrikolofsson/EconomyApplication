@@ -20,6 +20,7 @@ public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.Holder> {
     private LayoutInflater inflater;
     private List<Income> content;
     private Controller controller;
+    private int incomeId;
 
     public IncomeAdapter(Context context){
         this(context, new ArrayList<Income>());
@@ -76,7 +77,9 @@ public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.Holder> {
 
         @Override
         public void onClick(View itemView) {
-            //  controller.editIncome();
+            int position = getAdapterPosition();
+            incomeId = content.get(position).getId();
+            controller.editIncome(incomeId);
 
         }
     }

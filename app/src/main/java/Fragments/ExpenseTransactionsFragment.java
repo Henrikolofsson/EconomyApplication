@@ -43,6 +43,7 @@ public class ExpenseTransactionsFragment extends Fragment {
     private ExpenseAdapter expenseAdapter;
     private RecyclerView rvExpense;
     private ArrayList<Expense> content = new ArrayList<Expense>();
+    private ArrayList<Expense> filteredContent = new ArrayList<>();
     private Button btnFilter;
     private Button btnDateFrom;
     private Button btnDateTo;
@@ -51,6 +52,7 @@ public class ExpenseTransactionsFragment extends Fragment {
     private long dateTo;
     private TextView tvDateFrom;
     private TextView tvDateTo;
+    private boolean filtered = false;
 
 
     public ExpenseTransactionsFragment() {
@@ -65,6 +67,30 @@ public class ExpenseTransactionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_expense_transactions, container, false);
         initializeComponents(view);
         registerListeners();
+        expenseAdapter = new ExpenseAdapter(getActivity(), content);
+        rvExpense.setAdapter(expenseAdapter);
+        expenseAdapter.setController(controller);
+
+        if(savedInstanceState!=null){
+            long newDateFrom = savedInstanceState.getLong("dateFrom");
+            long newDateTo = savedInstanceState.getLong("dateTo");
+            ArrayList<Expense> recreatedContent = (ArrayList<Expense>) savedInstanceState.getSerializable("contentExpense");
+            ArrayList<Expense> recreatedFilteredContent = (ArrayList<Expense>) savedInstanceState.getSerializable("filteredcontentExpense");
+            for(int i = 0; i < recreatedFilteredContent.size(); i++){
+                Log.d("FINNS", recreatedFilteredContent.get(i).toString());
+            }
+            filtered = savedInstanceState.getBoolean("filteredExpense");
+            Log.d("FINNS",""+ filtered);
+            if((newDateFrom > 0) && (newDateTo > 0)) {
+                setDateFrom(newDateFrom);
+                setDateTo(newDateTo);
+                tvDateFrom.setText("Date from: " + DateHelper.convertDate(getDateFrom()));
+                tvDateTo.setText("Date from: " + DateHelper.convertDate(getDateTo()));
+            }
+
+            setContent(recreatedContent);
+            expenseAdapter.setContent(recreatedContent);
+        }
         return view;
     }
 
@@ -84,10 +110,6 @@ public class ExpenseTransactionsFragment extends Fragment {
         btnAll = (Button) view.findViewById(R.id.btnUnfilterExpense);
         tvDateFrom = (TextView) view.findViewById(R.id.tvExpenseDateFrom);
         tvDateTo = (TextView) view.findViewById(R.id.tvExpenseDateTo);
-
-        expenseAdapter = new ExpenseAdapter(getActivity(), content);
-        rvExpense.setAdapter(expenseAdapter);
-        expenseAdapter.setController(controller);
     }
 
     public void setController(Controller controller){
@@ -159,6 +181,7 @@ public class ExpenseTransactionsFragment extends Fragment {
         public void onClick(View v) {
             if(dateFrom > 0 && dateTo > 0){
                 controller.filterExpenseList(getDateFrom(), getDateTo());
+                filtered = true;
                 update();
             }
         }
@@ -168,6 +191,7 @@ public class ExpenseTransactionsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             controller.addExpenseList();
+            filtered = false;
             update();
         }
     }
@@ -176,49 +200,25 @@ public class ExpenseTransactionsFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        loadData();
+        if(content!=null){
+            expenseAdapter.setContent(content);
+        }
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        saveData();
-    }
-
-    private void saveData(){
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("ExpenseTransactionsFragment",AppCompatActivity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(content);
-        editor.putString("content", json);
-        editor.apply();
-        editor.commit();
-    }
-
-    private void loadData(){
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("ExpenseTransactionsFragment",AppCompatActivity.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPref.getString("content", null);
-        Type type = new TypeToken<ArrayList<Expense>>(){}.getType();
-        content = gson.fromJson(json, type);
-
-        if(content == null){
-            content = new ArrayList<Expense>();
-        }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null){
-            controller.addExpenseTransactionsFragment();
-            loadData();
-        }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveData();
+        outState.putBoolean("filteredExpense", filtered);
+        if((dateFrom > 0) && (dateTo > 0)) {
+            outState.putLong("dateFrom", dateFrom);
+            outState.putLong("dateTo", dateTo);
+        }
+        outState.putSerializable("contentExpense", content);
+        outState.putSerializable("filteredcontentExpense", filteredContent);
     }
+
 }

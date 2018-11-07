@@ -1,5 +1,6 @@
 package henrik.mau.economyapplication;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import Fragments.AddExpenseFragment;
 import Fragments.AddIncomeFragment;
 import Fragments.ButtonsFragment;
 import Fragments.DataFragment;
+import Fragments.EditExpenseFragment;
+import Fragments.EditIncomeFragment;
 import Fragments.ExpenseTransactionsFragment;
 import Fragments.IncomeTransactionsFragment;
 import Fragments.LogInFragment;
@@ -25,7 +28,11 @@ public class Controller {
     private IncomeTransactionsFragment incomeTransactionsFragment;
     private AddExpenseFragment addExpenseFragment;
     private ExpenseTransactionsFragment expenseTransactionsFragment;
+    private EditExpenseFragment editExpenseFragment;
+    private EditIncomeFragment editIncomeFragment;
     private DBAccess dbAccess;
+    private User user;
+    private String name;
 
     public Controller(MainActivity ui){
         this.ui = ui;
@@ -70,7 +77,7 @@ public class Controller {
             logInFragment = new LogInFragment();
         }
         logInFragment.setController(this);
-        addLogInFragment();
+
     }
 
     private void initializeButtonsFragment(){
@@ -114,11 +121,20 @@ public class Controller {
     }
 
     private void initializeEditIncomeFragment(){
+        editIncomeFragment = (EditIncomeFragment) ui.getFragment("EditIncomeFragment");
+        if(editIncomeFragment == null){
+            editIncomeFragment = new EditIncomeFragment();
+        }
+        editIncomeFragment.setController(this);
 
     }
 
     private void initializeEditExpenseFragment(){
-
+        editExpenseFragment = (EditExpenseFragment) ui.getFragment("EditExpenseFragment");
+        if(editExpenseFragment == null){
+            editExpenseFragment = new EditExpenseFragment();
+        }
+        editExpenseFragment.setController(this);
     }
 
     //END OF INITIALIZING ALL THE FRAGMENTS
@@ -131,6 +147,7 @@ public class Controller {
 
     public void addButtonsFragment(){
         setFragment("ButtonsFragment");
+
     }
 
     public void addAddIncomeFragment(){
@@ -148,7 +165,14 @@ public class Controller {
     public void addExpenseTransactionsFragment(){
         setFragment("ExpenseTransactionsFragment");
     }
-    //END OF ADDING FRAGMENTS TO THE GRAPHICAL USER INTERFACE
+
+    public void addEditExpenseFragment(){
+        setFragment("EditExpenseFragment");
+    }
+
+    public void addEditIncomeFragment(){
+        setFragment("EditIncomeFragment");
+    }
 
     //ONBACKPRESSED CHECKS IF THE ACTIVE FRAGMENT IS ANYTHING ELSE THEN LOG IN SCREEN IT WILL RETURN TRUE
 
@@ -174,6 +198,12 @@ public class Controller {
                 break;
             case "ExpenseTransactionsFragment":
                 setFragment("ButtonsFragment");
+                break;
+            case "EditExpenseFragment":
+                setFragment("ExpenseTransactionsFragment");
+                break;
+            case "EditIncomeFragment":
+                setFragment("IncomeTransactionsFragment");
                 break;
         }
         return false;
@@ -202,6 +232,12 @@ public class Controller {
             case "ExpenseTransactionsFragment":
                 setFragment(expenseTransactionsFragment, tag);
                 break;
+            case "EditExpenseFragment":
+                setFragment(editExpenseFragment, tag);
+                break;
+            case "EditIncomeFragment":
+                setFragment(editIncomeFragment, tag);
+                break;
         }
     }
 
@@ -213,13 +249,20 @@ public class Controller {
 
     //END OF METHOD RELATED TO SETTING CURRENT ACTIVE FRAGMENT
 
-    //LOG IN USER
 
-    public void logIn(String userName) {
-        User user = new User(userName);
-        buttonsFragment.setUserName(user.getUserName());
-        addButtonsFragment();
+    public void setName(String name){
+        this.name = name;
     }
+
+    public String getName(){
+        Log.d("getName.controller", name);
+        if(name!=null){
+            name=logInFragment.getName();
+            Log.d("getName.controller2", name);
+        }
+        return name;
+    }
+
 
     //COMMUNICATING WITH THE DATABASE OPERATIONS
 
@@ -229,6 +272,7 @@ public class Controller {
             public void run() {
                 try {
                     Income income = new Income(title,category,date,price);
+                    Log.d("TESTARDETTA", income.toString());
                     dbAccess.insertIncome(income);
                 } catch(Exception e){
                     e.printStackTrace();
@@ -300,7 +344,33 @@ public class Controller {
         }).start();
     }
 
+    public void editExpense(final int expenseId){
+       // addEditExpenseFragment();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Expense expense = dbAccess.getExpense(expenseId);
+                editExpenseFragment.setExpense(expense);
+                addEditExpenseFragment();
+                dbAccess.deleteExpense(expenseId);
+            }
+        }).start();
+    }
 
+    public void editIncome(final int incomeId){
+   //     addEditIncomeFragment();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Income income = dbAccess.getIncome(incomeId);
+                editIncomeFragment.setIncome(income);
+                addEditIncomeFragment();
+                dbAccess.deleteIncome(incomeId);
+            }
+        }).start();
+    }
 
-    //END OF COMMUNICATING WITH THE DATABASE OPERATIONS
+    public void onResume(){
+        name=logInFragment.getName();
+    }
 }

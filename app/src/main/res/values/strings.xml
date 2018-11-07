@@ -22,4 +22,6 @@
     <string name="DateTo">Date To: </string>
     <string name="btnFilter">Filter</string>
     <string name="btnUnfilter">Unfilter</string>
+    <string name="btnEditExpense">Edit Expense</string>
+    <string name="btnEditIncome">Edit Income</string>
 </resources>

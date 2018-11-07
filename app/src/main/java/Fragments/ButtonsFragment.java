@@ -1,8 +1,12 @@
 package Fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +26,7 @@ public class ButtonsFragment extends Fragment {
     private Button btnExpenses;
     private Button btnAddExpense;
     private TextView tvWelcomeUser;
-    private String username;
+    private String name;
 
     public ButtonsFragment() {
         // Required empty public constructor
@@ -35,6 +39,11 @@ public class ButtonsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_buttons, container, false);
         initializeComponents(view);
         registerListeners();
+
+        if(name!=(null)){
+            Log.d("onCreateView.Buttons", name);
+            setWelcomeText(name);}
+
         return view;
     }
 
@@ -42,13 +51,22 @@ public class ButtonsFragment extends Fragment {
         this.controller = controller;
     }
 
-    public void setUserName(String username){
-        this.username = username;
+    public void setName(String name){
+        Log.d("setName.Buttons", name);
+        this.name = name;
+        setWelcomeText(name);
     }
 
-    public String getUserName(){
-        return username;
+    public String getName(){
+        Log.d("getName.Buttons", name);
+        return name;
     }
+
+    public void setWelcomeText(String name){
+        Log.d("The name is", name);
+            tvWelcomeUser.setText("Welcome user: " + name);
+    }
+
 
     private void initializeComponents(View view) {
         btnIncomes = (Button) view.findViewById(R.id.btnIncomes);
@@ -56,7 +74,6 @@ public class ButtonsFragment extends Fragment {
         btnAddIncome = (Button) view.findViewById(R.id.btnAddIncome);
         btnAddExpense = (Button) view.findViewById(R.id.btnAddExpense);
         tvWelcomeUser = (TextView) view.findViewById(R.id.tvWelcomeUser);
-        tvWelcomeUser.setText("Welcome, good to see you again " + getUserName());
     }
 
     private void registerListeners(){
@@ -96,4 +113,42 @@ public class ButtonsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        readName();
+        if(name!=null){
+        setWelcomeText(name);}
+        Log.d("LOGIN", "onResume: ");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        writeName();
+
+
+        Log.d("LOGIN", "onPause: ");
+    }
+
+
+    public void writeName(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("ButtonsFragment", AppCompatActivity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("name", name);
+        editor.commit();
+    }
+
+    public void readName(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("ButtonsFragment", AppCompatActivity.MODE_PRIVATE);
+        String nullcheck;
+        nullcheck = sharedPref.getString("name","");
+        Log.d("readName.Buttons", nullcheck);
+
+        if(nullcheck!=null){
+     name=nullcheck;
+        }
+        System.out.print(name);
+    }
 }

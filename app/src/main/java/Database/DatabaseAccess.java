@@ -36,4 +36,9 @@ public interface DatabaseAccess {
     @Query("SELECT * FROM expense_table WHERE expense_date BETWEEN :dateFrom and :dateTo ORDER BY expense_date")
     List<Expense> filterExpense(long dateFrom, long dateTo);
 
+    @Query("DELETE FROM EXPENSE_TABLE WHERE expense_id = :expenseId")
+    void deleteExpense(int expenseId);
+
+    @Query("DELETE FROM income_table WHERE income_id = :incomeId")
+    void deleteIncome(int incomeId);
 }

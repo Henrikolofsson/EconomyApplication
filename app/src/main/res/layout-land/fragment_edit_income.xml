@@ -1,27 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutAddIncomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="Fragments.AddIncomeFragment">
+    tools:context="Fragments.EditIncomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="99dp"
+        android:layout_height="65dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeTitle"
+            android:id="@+id/tvEditIncomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Title" />
 
         <EditText
-            android:id="@+id/etAddIncomeTitle"
+            android:id="@+id/etEditIncomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,31 +31,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="149dp"
+        android:layout_height="80dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeCategory"
+            android:id="@+id/tvEditIncomeCategory"
             android:layout_width="302dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Category" />
 
         <RadioGroup
-            android:id="@+id/rgAddIncome"
+            android:id="@+id/rgEditIncome"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_weight="1">
 
             <RadioButton
-                android:id="@+id/rbAddIncomeSalary"
+                android:id="@+id/rbEditIncomeSalary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/Salary" />
 
             <RadioButton
-                android:id="@+id/rbAddIncomeOther"
+                android:id="@+id/rbEditIncomeOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -65,18 +65,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="60dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeDate"
+            android:id="@+id/tvEditIncomeDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Date" />
 
         <Button
-            android:id="@+id/btnAddIncomeDate"
+            android:id="@+id/btnEditIncomeDate"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_weight="1"
@@ -85,18 +85,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="87dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomePrice"
+            android:id="@+id/tvEditIncomePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Price" />
 
         <EditText
-            android:id="@+id/etAddIncomePrice"
+            android:id="@+id/etEditIncomePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -110,10 +110,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnAddIncome"
+            android:id="@+id/btnEditIncome"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
             android:text="@string/AddIncome" />
     </LinearLayout>
+
 </LinearLayout>

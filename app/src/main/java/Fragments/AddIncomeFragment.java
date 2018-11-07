@@ -3,6 +3,7 @@ package Fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,12 @@ public class AddIncomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_income, container, false);
         initializeComponents(view);
         registerListeners();
+
+        if(savedInstanceState != null){
+            long oldTime = savedInstanceState.getLong("date");
+            setTime(oldTime);
+            tvAddIncomeDate.setText("Date: " + DateHelper.convertDate(oldTime));
+        }
         return view;
     }
 
@@ -119,8 +126,14 @@ public class AddIncomeFragment extends Fragment {
             long date = time;
             Double price = Double.parseDouble(etPrice.getText().toString());
             controller.addIncome(title,category,date,price);
+            controller.addIncomeList();
             controller.addIncomeTransactionsFragment();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong("date", time);
     }
 
 }

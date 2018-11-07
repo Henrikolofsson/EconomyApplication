@@ -3,7 +3,9 @@ package Fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -35,6 +38,7 @@ public class AddExpenseFragment extends Fragment {
     private RadioButton rbSparetime;
     private Button btnAddExpense;
     private Button btnAddDate;
+    private TextView tvDate;
     private int checkedRadioButtonId;
     private String checkedRadioButtonText;
     private long time;
@@ -50,6 +54,13 @@ public class AddExpenseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_expense, container, false);
         initializeComponents(view);
         registerListeners();
+
+        if(savedInstanceState != null){
+            long oldTime = savedInstanceState.getLong("date");
+            Log.d("OldTime", Long.toString(oldTime));
+            setTime(oldTime);
+            tvDate.setText("Date: " + DateHelper.convertDate(oldTime));
+        }
         return view;
     }
 
@@ -68,6 +79,8 @@ public class AddExpenseFragment extends Fragment {
         rbSparetime = (RadioButton) view.findViewById(R.id.rbAddExpenseSparetime);
         btnAddExpense = (Button) view.findViewById(R.id.btnAddExpense);
         btnAddDate = (Button) view.findViewById(R.id.btnAddExpenseDate);
+        tvDate = (TextView) view.findViewById(R.id.tvAddExpenseDate);
+
     }
 
     public void registerListeners(){
@@ -123,10 +136,13 @@ public class AddExpenseFragment extends Fragment {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year,month,dayOfMonth);
             setTime(calendar.getTimeInMillis());
-            DateHelper.convertDate(getTime());
+            String tvTime = DateHelper.convertDate(getTime());
+            tvDate.setText("Date: " + tvTime);
         }
     }
 
-
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong("date", time);
+    }
 }

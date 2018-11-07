@@ -1,27 +1,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutAddIncomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="Fragments.AddIncomeFragment">
+    tools:context="Fragments.EditExpenseFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="99dp"
+        android:layout_height="61dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeTitle"
+            android:id="@+id/tvEditExpenseTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Title" />
 
         <EditText
-            android:id="@+id/etAddIncomeTitle"
+            android:id="@+id/etEditExpenseTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,31 +29,52 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="149dp"
+        android:layout_height="121dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeCategory"
+            android:id="@+id/tvEditExpenseCategory"
             android:layout_width="302dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Category" />
 
         <RadioGroup
-            android:id="@+id/rgAddIncome"
+            android:id="@+id/rgEditExpense"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="114dp"
             android:layout_weight="1">
 
             <RadioButton
-                android:id="@+id/rbAddIncomeSalary"
+                android:id="@+id/rbEditExpenseAccommodation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Salary" />
+                android:text="@string/Accommodation" />
 
             <RadioButton
-                android:id="@+id/rbAddIncomeOther"
+                android:id="@+id/rbEditExpenseGroceries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Groceries" />
+
+            <RadioButton
+                android:id="@+id/rbEditExpenseSparetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Sparetime" />
+
+            <RadioButton
+                android:id="@+id/rbEditExpenseTravel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Travel" />
+
+            <RadioButton
+                android:id="@+id/rbEditExpenseOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -65,18 +84,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomeDate"
+            android:id="@+id/tvEditExpenseDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Date" />
 
         <Button
-            android:id="@+id/btnAddIncomeDate"
+            android:id="@+id/btnEditExpenseDate"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_weight="1"
@@ -85,18 +104,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="87dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddIncomePrice"
+            android:id="@+id/tvEditExpensePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Price" />
 
         <EditText
-            android:id="@+id/etAddIncomePrice"
+            android:id="@+id/etEditExpensePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -107,13 +126,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnAddIncome"
+            android:id="@+id/btnEditExpense"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
-            android:text="@string/AddIncome" />
+            android:text="@string/btnEditExpense" />
     </LinearLayout>
+
 </LinearLayout>

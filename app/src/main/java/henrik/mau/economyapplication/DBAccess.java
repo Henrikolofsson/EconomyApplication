@@ -60,4 +60,12 @@ public class DBAccess {
     public List<Expense> getAllExpenses() {
         return dbAccess.getAllExpenses();
     }
+
+    public void deleteExpense(int expenseId){
+        dbAccess.deleteExpense(expenseId);
+    }
+
+    public void deleteIncome(int incomeId){
+        dbAccess.deleteIncome(incomeId);
+    }
 }

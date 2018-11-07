@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/Date" />
     </LinearLayout>
 
     <LinearLayout
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/AddExpense" />
     </LinearLayout>
 
 </LinearLayout>
