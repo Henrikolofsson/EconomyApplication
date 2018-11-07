@@ -68,4 +68,20 @@ public class DBAccess {
     public void deleteIncome(int incomeId){
         dbAccess.deleteIncome(incomeId);
     }
+
+    public int getTotalIncome(long from, long to){
+        return dbAccess.getTotalIncome(from, to);
+    }
+
+    public int getTotalExpense(long from, long to){
+        return dbAccess.getTotalExpense(from, to);
+    }
+
+    public int getTotalIncomeForBalance(){
+        return dbAccess.getTotalIncomeForBalance();
+    }
+
+    public int getTotalExpenseForBalance(){
+        return dbAccess.getTotalExpenseForBalance();
+    }
 }

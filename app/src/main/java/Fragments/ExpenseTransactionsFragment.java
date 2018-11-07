@@ -52,6 +52,7 @@ public class ExpenseTransactionsFragment extends Fragment {
     private long dateTo;
     private TextView tvDateFrom;
     private TextView tvDateTo;
+    private TextView tvTotalExpense;
     private boolean filtered = false;
 
 
@@ -62,8 +63,6 @@ public class ExpenseTransactionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.setRetainInstance(true);
-        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_expense_transactions, container, false);
         initializeComponents(view);
         registerListeners();
@@ -75,12 +74,7 @@ public class ExpenseTransactionsFragment extends Fragment {
             long newDateFrom = savedInstanceState.getLong("dateFrom");
             long newDateTo = savedInstanceState.getLong("dateTo");
             ArrayList<Expense> recreatedContent = (ArrayList<Expense>) savedInstanceState.getSerializable("contentExpense");
-            ArrayList<Expense> recreatedFilteredContent = (ArrayList<Expense>) savedInstanceState.getSerializable("filteredcontentExpense");
-            for(int i = 0; i < recreatedFilteredContent.size(); i++){
-                Log.d("FINNS", recreatedFilteredContent.get(i).toString());
-            }
             filtered = savedInstanceState.getBoolean("filteredExpense");
-            Log.d("FINNS",""+ filtered);
             if((newDateFrom > 0) && (newDateTo > 0)) {
                 setDateFrom(newDateFrom);
                 setDateTo(newDateTo);
@@ -91,7 +85,17 @@ public class ExpenseTransactionsFragment extends Fragment {
             setContent(recreatedContent);
             expenseAdapter.setContent(recreatedContent);
         }
+        setTotalExpenseText();
         return view;
+    }
+
+    public void setTotalExpenseText(){
+        if(dateFrom > 0 && dateTo > 0) {
+            tvTotalExpense.setText("Your total expense between " + DateHelper.convertDate(dateFrom) + " and " + DateHelper.convertDate(dateTo) + ": "
+                    + controller.getTotalExpense(dateFrom, dateTo));
+        } else {
+            tvTotalExpense.setText("You need to choose an intervall to get total expense");
+        }
     }
 
     private void registerListeners() {
@@ -110,6 +114,7 @@ public class ExpenseTransactionsFragment extends Fragment {
         btnAll = (Button) view.findViewById(R.id.btnUnfilterExpense);
         tvDateFrom = (TextView) view.findViewById(R.id.tvExpenseDateFrom);
         tvDateTo = (TextView) view.findViewById(R.id.tvExpenseDateTo);
+        tvTotalExpense = (TextView) view.findViewById(R.id.tvTotalExpense);
     }
 
     public void setController(Controller controller){
@@ -117,7 +122,7 @@ public class ExpenseTransactionsFragment extends Fragment {
     }
 
     public void setContent(List<Expense> content){
-        this.content = (ArrayList<Expense>) content; //ArrayList eller list?
+        this.content = (ArrayList<Expense>) content;
     }
 
     public void setDateTo(long dateTo){
@@ -182,6 +187,7 @@ public class ExpenseTransactionsFragment extends Fragment {
             if(dateFrom > 0 && dateTo > 0){
                 controller.filterExpenseList(getDateFrom(), getDateTo());
                 filtered = true;
+                setTotalExpenseText();
                 update();
             }
         }

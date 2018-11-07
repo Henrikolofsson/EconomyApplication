@@ -38,7 +38,6 @@ public class LogInFragment extends Fragment {
         initializeComponents(view);
         registerListeners();
 
-
         return view;
     }
 
@@ -64,26 +63,17 @@ public class LogInFragment extends Fragment {
         }
     }
 
-    public String getName(){
-        return name;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         readName();
         etUser.setText(name);
-        Log.d("LOGIN", "onResume: " + name);
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
         writeName();
-
-
-        Log.d("LOGIN", "onPause: " + name);
     }
 
 
@@ -97,7 +87,6 @@ public class LogInFragment extends Fragment {
     public void readName(){
         SharedPreferences sharedPref = getActivity().getSharedPreferences("LogInFragment", AppCompatActivity.MODE_PRIVATE);
         name = sharedPref.getString("name","");
-        System.out.print(name);
     }
 
 }

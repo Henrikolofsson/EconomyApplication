@@ -41,4 +41,17 @@ public interface DatabaseAccess {
 
     @Query("DELETE FROM income_table WHERE income_id = :incomeId")
     void deleteIncome(int incomeId);
+
+    @Query("SELECT SUM(income_price) FROM income_table WHERE income_date BETWEEN :from AND :to")
+    int getTotalIncome(long from, long to);
+
+    @Query("SELECT SUM(expense_price) FROM expense_table WHERE expense_date BETWEEN :from AND :to")
+    int getTotalExpense(long from, long to);
+
+    @Query("SELECT SUM(income_price) FROM income_table")
+    int getTotalIncomeForBalance();
+
+    @Query("SELECT SUM(expense_price) FROM expense_table")
+    int getTotalExpenseForBalance();
+
 }

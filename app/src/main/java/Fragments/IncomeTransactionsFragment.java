@@ -49,7 +49,9 @@ public class IncomeTransactionsFragment extends Fragment {
     private long dateTo;
     private TextView tvDateFrom;
     private TextView tvDateTo;
+    private TextView tvTotalIncome;
     private boolean filtered;
+    private int totalIncome;
 
     public IncomeTransactionsFragment() {
         // Required empty public constructor
@@ -70,7 +72,6 @@ public class IncomeTransactionsFragment extends Fragment {
             long newDateFrom = savedInstanceState.getLong("dateFrom");
             long newDateTo = savedInstanceState.getLong("dateTo");
             ArrayList<Income> recreatedContent = (ArrayList<Income>) savedInstanceState.getSerializable("content");
-            ArrayList<Income> recreatedFilteredContent = (ArrayList<Income>) savedInstanceState.getSerializable("filteredcontent");
             filtered = savedInstanceState.getBoolean("filtered");
             if((newDateFrom > 0) && (newDateTo > 0)){
                 setDateFrom(newDateFrom);
@@ -82,7 +83,17 @@ public class IncomeTransactionsFragment extends Fragment {
             setContent(recreatedContent);
             incomeAdapter.setContent(recreatedContent);
         }
+        setTotalIncomeText();
         return view;
+    }
+
+    public void setTotalIncomeText(){
+        if(dateFrom > 0 && dateTo > 0) {
+            tvTotalIncome.setText("Your total income between " + DateHelper.convertDate(dateFrom) + " and " + DateHelper.convertDate(dateTo) + ": "
+                    + controller.getTotalIncome(dateFrom, dateTo));
+        } else {
+            tvTotalIncome.setText("You need to choose an intervall to get total income");
+        }
     }
 
     private void initializeComponents(View view) {
@@ -94,6 +105,7 @@ public class IncomeTransactionsFragment extends Fragment {
         btnDateTo = (Button) view.findViewById(R.id.btnIncomeDateTo);
         tvDateFrom = (TextView) view.findViewById(R.id.tvIncomeDateFrom);
         tvDateTo = (TextView) view.findViewById(R.id.tvIncomeDateTo);
+        tvTotalIncome = (TextView) view.findViewById(R.id.tvTotalIncome);
     }
 
     public void registerListeners(){
@@ -143,7 +155,6 @@ public class IncomeTransactionsFragment extends Fragment {
             DateHelperFragment dhf = new DateHelperFragment();
             dhf.setOnDateListener(this);
             dhf.show(getFragmentManager(), "datePicker");
-
         }
     }
 
@@ -172,6 +183,7 @@ public class IncomeTransactionsFragment extends Fragment {
             if(dateFrom > 0 && dateTo > 0){
                 controller.filterIncomeList(getDateFrom(), getDateTo());
                 filtered = true;
+                setTotalIncomeText();
                 update();
             }
         }

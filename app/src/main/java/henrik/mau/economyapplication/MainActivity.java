@@ -45,8 +45,4 @@ public class MainActivity extends AppCompatActivity {
         return fm.findFragmentByTag(tag);
     }
 
-    public void onResume(){
-        super.onResume();
-        controller.onResume();
-    }
 }

@@ -9,7 +9,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvIncomeTransactions"
         android:layout_width="match_parent"
-        android:layout_height="378dp" />
+        android:layout_height="331dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="101dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
@@ -72,6 +72,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btnUnfilter" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTotalIncome"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:text="TextView" />
     </LinearLayout>
 
 </LinearLayout>

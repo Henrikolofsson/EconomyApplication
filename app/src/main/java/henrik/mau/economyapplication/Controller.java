@@ -1,5 +1,6 @@
 package henrik.mau.economyapplication;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,12 +34,16 @@ public class Controller {
     private DBAccess dbAccess;
     private User user;
     private String name;
+    private int totalIncome;
+    private int totalExpense;
+    private int balance;
 
     public Controller(MainActivity ui){
         this.ui = ui;
         initializeDataFragment();
         initializeAllFragments();
         initializeDatabase();
+        loadUser();
     }
 
     //INITIALIZE DATABASE
@@ -147,7 +152,6 @@ public class Controller {
 
     public void addButtonsFragment(){
         setFragment("ButtonsFragment");
-
     }
 
     public void addAddIncomeFragment(){
@@ -252,14 +256,10 @@ public class Controller {
 
     public void setName(String name){
         this.name = name;
+        saveUser();
     }
 
     public String getName(){
-        Log.d("getName.controller", name);
-        if(name!=null){
-            name=logInFragment.getName();
-            Log.d("getName.controller2", name);
-        }
         return name;
     }
 
@@ -370,7 +370,50 @@ public class Controller {
         }).start();
     }
 
-    public void onResume(){
-        name=logInFragment.getName();
+    public int getTotalIncome(final long from, final long to){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                totalIncome = dbAccess.getTotalIncome(from,to);
+            }
+        }).start();
+        return totalIncome;
     }
+
+    public int getTotalExpense(final long from, final long to){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                totalExpense = dbAccess.getTotalExpense(from, to);
+            }
+        }).start();
+        return totalExpense;
+    }
+
+    public int getBalance(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int totalIncomeForBalance = dbAccess.getTotalIncomeForBalance();
+                int totalExpenseForBalance = dbAccess.getTotalExpenseForBalance();
+                balance = totalIncomeForBalance - totalExpenseForBalance;
+            }
+        }).start();
+        return balance;
+    }
+
+
+
+    public void saveUser(){
+        SharedPreferences sp = ui.getSharedPreferences("Controller", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("name", name);
+        editor.commit();
+    }
+
+    public void loadUser(){
+        SharedPreferences sp = ui.getSharedPreferences("Controller", Context.MODE_PRIVATE);
+        name = sp.getString("name", "");
+    }
+
 }

@@ -26,6 +26,7 @@ public class ButtonsFragment extends Fragment {
     private Button btnExpenses;
     private Button btnAddExpense;
     private TextView tvWelcomeUser;
+    private TextView tvBalance;
     private String name;
 
     public ButtonsFragment() {
@@ -39,10 +40,8 @@ public class ButtonsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_buttons, container, false);
         initializeComponents(view);
         registerListeners();
-
-        if(name!=(null)){
-            Log.d("onCreateView.Buttons", name);
-            setWelcomeText(name);}
+        setWelcomeText();
+        setBalanceText();
 
         return view;
     }
@@ -52,19 +51,19 @@ public class ButtonsFragment extends Fragment {
     }
 
     public void setName(String name){
-        Log.d("setName.Buttons", name);
         this.name = name;
-        setWelcomeText(name);
     }
 
     public String getName(){
-        Log.d("getName.Buttons", name);
         return name;
     }
 
-    public void setWelcomeText(String name){
-        Log.d("The name is", name);
-            tvWelcomeUser.setText("Welcome user: " + name);
+    public void setWelcomeText(){
+        tvWelcomeUser.setText("Welcome User:" + controller.getName());
+    }
+
+    public void setBalanceText(){
+        tvBalance.setText("Your total balance is: " + controller.getBalance());
     }
 
 
@@ -74,6 +73,8 @@ public class ButtonsFragment extends Fragment {
         btnAddIncome = (Button) view.findViewById(R.id.btnAddIncome);
         btnAddExpense = (Button) view.findViewById(R.id.btnAddExpense);
         tvWelcomeUser = (TextView) view.findViewById(R.id.tvWelcomeUser);
+        tvBalance = (TextView) view.findViewById(R.id.tvBalance);
+
     }
 
     private void registerListeners(){
@@ -117,9 +118,6 @@ public class ButtonsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         readName();
-        if(name!=null){
-        setWelcomeText(name);}
-        Log.d("LOGIN", "onResume: ");
 
     }
 
@@ -127,9 +125,6 @@ public class ButtonsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         writeName();
-
-
-        Log.d("LOGIN", "onPause: ");
     }
 
 
@@ -147,7 +142,7 @@ public class ButtonsFragment extends Fragment {
         Log.d("readName.Buttons", nullcheck);
 
         if(nullcheck!=null){
-     name=nullcheck;
+            name=nullcheck;
         }
         System.out.print(name);
     }
